@@ -12,8 +12,8 @@ public class MessageService {
 	private Map<Long, Message> messages = DatabaseClass.getMessages();
 	
 	public MessageService() {
-		messages.put(1L, new Message(1L, "Hello World", "koushik"));
-		messages.put(2L, new Message(2L, "Hello Jersey", "koushik"));
+		messages.put(1L, new Message(1L, "Hello World", "Nadeem"));
+		messages.put(2L, new Message(2L, "Hello Jersey", "Nadeem"));
 	}
 	
 	
@@ -41,10 +41,6 @@ public class MessageService {
 	
 	public Message removeMessage(long id) {
 		return messages.remove(id);
-	}
-	
-
-	
-	
+	}	
 	
 }
