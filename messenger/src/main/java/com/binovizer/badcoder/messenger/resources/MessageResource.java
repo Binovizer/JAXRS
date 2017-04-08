@@ -24,7 +24,7 @@ import com.binovizer.badcoder.messenger.services.MessageService;
 
 @Path("/messages")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 public class MessageResource {
 
 	MessageService messageService = new MessageService();
@@ -68,8 +68,55 @@ public class MessageResource {
 	
 	@GET
 	@Path("/{messageId}")
-	public Message getMessage(@PathParam("messageId") long id) {
-		return messageService.getMessage(id);
+	@Produces(MediaType.APPLICATION_JSON)
+	public Message getMessageAsJSON(@PathParam("messageId") long id, @Context UriInfo uriInfo) {
+		System.out.println("JSON Response");
+		Message message = messageService.getMessage(id);
+		message.addLink(getUriForSelf(message, uriInfo), "self");
+		message.addLink(getUriForProfile(message, uriInfo), "profile");
+		message.addLink(getUriForComment(message, uriInfo), "comments");
+		return message;
+	}
+	
+	@GET
+	@Path("/{messageId}")
+	@Produces(MediaType.TEXT_XML)
+	public Message getMessageAsXML(@PathParam("messageId") long id, @Context UriInfo uriInfo) {
+		System.out.println("XML Response");
+		Message message = messageService.getMessage(id);
+		message.addLink(getUriForSelf(message, uriInfo), "self");
+		message.addLink(getUriForProfile(message, uriInfo), "profile");
+		message.addLink(getUriForComment(message, uriInfo), "comments");
+		return message;
+	}
+
+	private String getUriForComment(Message message, UriInfo uriInfo) {
+		String uri = uriInfo.getBaseUriBuilder()
+							.path(MessageResource.class)
+							.path(MessageResource.class, "getCommentResource")
+							.path(CommentResource.class)
+							.resolveTemplate("messageId", message.getId())
+							.build()
+							.toString();
+		return uri;
+	}
+
+	private String getUriForProfile(Message message, UriInfo uriInfo) {
+		String uri = uriInfo.getBaseUriBuilder()
+							.path(ProfileResource.class)
+							.path(message.getAuthor())
+							.build()
+							.toString();
+		return uri;
+	}
+
+	private String getUriForSelf(Message message, UriInfo uriInfo) {
+		String uri = uriInfo.getBaseUriBuilder()
+							.path(MessageResource.class)
+							.path(Long.toString(message.getId()))
+							.build()
+							.toString();
+		return uri;
 	}
 	
 	

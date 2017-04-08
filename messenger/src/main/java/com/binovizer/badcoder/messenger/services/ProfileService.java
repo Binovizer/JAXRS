@@ -12,7 +12,7 @@ public class ProfileService {
 	private Map<String, Profile> profiles = DatabaseClass.getProfiles();
 	
 	public ProfileService() {
-		profiles.put("nadeem", new Profile(1L, "nadeem", "Mohd", "Nadeem"));
+		profiles.put("Nadeem", new Profile(1L, "nadeem", "Mohd", "Nadeem"));
 	}
 	
 	public List<Profile> getAllProfiles() {
