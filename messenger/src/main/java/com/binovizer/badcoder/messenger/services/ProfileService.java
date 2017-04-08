@@ -8,14 +8,13 @@ import com.binovizer.badcoder.messenger.database.DatabaseClass;
 import com.binovizer.badcoder.messenger.models.Profile;
 
 public class ProfileService {
-	
+
 	private Map<String, Profile> profiles = DatabaseClass.getProfiles();
 	
 	public ProfileService() {
-		profiles.put("Nadeem", new Profile(1L, "Nadeem", "Mohd", "Nadeem"));
-		profiles.put("Aayan", new Profile(2L, "Aayan", "Mohammad", "Aayan"));
+		profiles.put("nadeem", new Profile(1L, "nadeem", "Mohd", "Nadeem"));
 	}
-
+	
 	public List<Profile> getAllProfiles() {
 		return new ArrayList<Profile>(profiles.values()); 
 	}
@@ -25,7 +24,7 @@ public class ProfileService {
 	}
 	
 	public Profile addProfile(Profile profile) {
-		profile.setId((long) (profiles.size() + 1));
+		profile.setId(profiles.size() + 1);
 		profiles.put(profile.getProfileName(), profile);
 		return profile;
 	}
@@ -41,4 +40,6 @@ public class ProfileService {
 	public Profile removeProfile(String profileName) {
 		return profiles.remove(profileName);
 	}
+	
+	
 }
